@@ -10,11 +10,11 @@
     "level": 6
   },
   "database": {
-    "username": "postgres.vsmtsgxlvpkmjnmbxqwn",
-    "password": "Lktc8EpOWaWS2z1g",
-    "host": "aws-1-ap-southeast-1.pooler.supabase.com",
-    "port": 5432,
-    "name": "postgres",
+    "username": "",
+    "password": "",
+    "host": "",
+    "port": "",
+    "name": "",
     "pool": {
       "idle": 10,
       "max": 100,
