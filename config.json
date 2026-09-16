@@ -1,0 +1,25 @@
+{
+  "app": {
+    "name": "go-template"
+  },
+  "web": {
+    "prefork": false,
+    "port": 3000
+  },
+  "log": {
+    "level": 6
+  },
+  "database": {
+    "username": "postgres.vsmtsgxlvpkmjnmbxqwn",
+    "password": "Lktc8EpOWaWS2z1g",
+    "host": "aws-1-ap-southeast-1.pooler.supabase.com",
+    "port": 5432,
+    "name": "postgres",
+    "pool": {
+      "idle": 10,
+      "max": 100,
+      "lifetime": 300
+    },
+    "sslmode": "require"
+  }
+}

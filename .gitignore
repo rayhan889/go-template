@@ -1,0 +1,32 @@
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Compiled binaries
+/bin/
+/dist/
+/web
+/worker
+*.exe
+*.test
+*.out
+
+# Go build/test artifacts
+*.prof
+coverage.txt
+coverage.html
+
+# Dependency directories (using go.mod, vendor is optional)
+/vendor/
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+
+# OS files
+.DS_Store
+
+# Logs
+*.log

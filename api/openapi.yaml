@@ -1,0 +1,230 @@
+openapi: 3.1.0
+info:
+  title: go-template API
+  description: User registration, authentication, and profile management API.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+    description: Local development server
+tags:
+  - name: Users
+    description: Registration, authentication, and profile management
+paths:
+  /api/users/register:
+    post:
+      tags: [Users]
+      summary: Register a new user
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterUserRequest'
+      responses:
+        '200':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWebResponse'
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: A user with this ID already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/users/_login:
+    post:
+      tags: [Users]
+      summary: Log in and receive an auth token
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUserRequest'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWebResponse'
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Wrong ID or password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/users:
+    delete:
+      tags: [Users]
+      summary: Log out the current user
+      operationId: logoutUser
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Logout successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BoolWebResponse'
+        '401':
+          description: Missing or invalid Authorization token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/users/_current:
+    get:
+      tags: [Users]
+      summary: Get the current authenticated user
+      operationId: getCurrentUser
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWebResponse'
+        '401':
+          description: Missing or invalid Authorization token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    patch:
+      tags: [Users]
+      summary: Update the current authenticated user
+      operationId: updateCurrentUser
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserRequest'
+      responses:
+        '200':
+          description: Updated user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWebResponse'
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Missing or invalid Authorization token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Raw session token issued by the login endpoint (not a Bearer-prefixed value).
+
+  schemas:
+    RegisterUserRequest:
+      type: object
+      required: [id, password, name]
+      properties:
+        id:
+          type: string
+          maxLength: 100
+        password:
+          type: string
+          maxLength: 100
+          format: password
+        name:
+          type: string
+          maxLength: 100
+
+    LoginUserRequest:
+      type: object
+      required: [id, password]
+      properties:
+        id:
+          type: string
+          maxLength: 100
+        password:
+          type: string
+          maxLength: 100
+          format: password
+
+    UpdateUserRequest:
+      type: object
+      properties:
+        password:
+          type: string
+          maxLength: 100
+          format: password
+        name:
+          type: string
+          maxLength: 100
+
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        token:
+          type: string
+          description: Only populated on the login response.
+        created_at:
+          type: integer
+          format: int64
+          description: Unix epoch milliseconds.
+        updated_at:
+          type: integer
+          format: int64
+          description: Unix epoch milliseconds.
+
+    UserWebResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/UserResponse'
+
+    BoolWebResponse:
+      type: object
+      properties:
+        data:
+          type: boolean
+
+    ErrorResponse:
+      type: object
+      properties:
+        errors:
+          type: string
