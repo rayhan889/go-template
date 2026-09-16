@@ -86,8 +86,6 @@ Configuration is read from `config.json` at the repo root (via Viper, see `inter
 - `log.level` is a `logrus.Level` value (0=Panic … 6=Trace).
 - `database.sslmode` should be `disable` for a local Postgres instance without TLS.
 
-> **Note:** `config.json` is currently committed with real database credentials. Treat this as a placeholder to replace with your own local/dev database before pushing further changes — don't commit real secrets.
-
 ### 2. Run database migrations
 
 Migration files live in `db/migrations/` using the `golang-migrate` naming convention (`<timestamp>_<name>.up.sql` / `.down.sql`).
